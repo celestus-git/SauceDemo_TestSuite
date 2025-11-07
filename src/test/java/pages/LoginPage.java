@@ -50,7 +50,7 @@ public class LoginPage extends BasePage{
     }
 
     public void waitForSuccessfulLogin(){
-        wait.waitForSuccessfullLogin("inventory.html");
+        wait.waitForSuccessfullyLogin("inventory.html");
     }
     public boolean isLoginPageDisplayed(){
         return isDisplayed(loginButton);
