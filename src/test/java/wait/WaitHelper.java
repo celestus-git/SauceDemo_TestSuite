@@ -14,7 +14,6 @@ import java.time.Duration;
 public class WaitHelper {
 
 private WebDriver driver;
-private WebDriverWait wait;
 
 /* Constructor aplica dependency injection. Recibe el driver como parámetro, no lo crea
  * @param driver WebDriver sobre el cual aplica las esperas
@@ -46,7 +45,7 @@ public WebElement waitForElementToBeClickable(WebElement element){
 public WebElement waitForElementToBeVisible(WebElement element){
     return getFluentWait().until(ExpectedConditions.visibilityOf(element));
 }
-public void waitForSuccessfullLogin(String urlPart){
+public void waitForSuccessfullyLogin(String urlPart){
     getFluentWait().until(ExpectedConditions.urlContains(urlPart));
 }
 

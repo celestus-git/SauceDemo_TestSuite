@@ -21,7 +21,7 @@ public class BasePage {
     protected void sendKeys(WebElement element, String text){
         wait.waitForElementToBeVisible(element);
         element.clear();
-        if (text!=null &&text.isEmpty()){
+        if (text!=null &&!text.isEmpty()){
             element.sendKeys(text);
         } else {
             throw new IllegalArgumentException("text cannot be null or empty");
@@ -41,6 +41,9 @@ public class BasePage {
         wait.waitForElementToBeVisible(element);
         element.clear();
 
+    }
+    protected String getCurrentUrl(){
+        return driver.getCurrentUrl();
     }
     protected boolean isDisplayed(WebElement element){
         try {

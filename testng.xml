@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <test verbose="2" preserve-order="true" name="Chrome test">
+        <parameter name="browserType" value="CHROME">
+            <classes>
+                <class name="tests.LoginTest">
+                    <methods>
+                        <include name="successfulLogin"/>
+                    </methods>
+                </class>
+            </classes>
+        </parameter>
+    </test>
+    <test verbose="2" preserve-order="true" name="Edge test">
+        <parameter name="browserType" value="EDGE">
+            <classes>
+                <class name="tests.LoginTest">
+                    <methods>
+                        <include name="successfulLogin"/>
+                    </methods>
+                </class>
+            </classes>
+        </parameter>
+    </test>
+    <test verbose="2" preserve-order="true" name="Firefox test">
+        <parameter name="browserType" value="FIREFOX">
+            <classes>
+                <class name="tests.LoginTest">
+                    <methods>
+                        <include name="successfulLogin"/>
+                    </methods>
+                </class>
+            </classes>
+        </parameter>
+    </test>
+</suite>

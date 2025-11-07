@@ -17,15 +17,17 @@ public class BaseTest{
     private final String BASE_URL = "https://www.saucedemo.com/";
 
     @BeforeMethod
-    @Parameters("browser")
+
+    @Parameters("browserType")
     public void setUp(String browserName){
 
         BrowserType browser = BrowserType.valueOf(browserName.toUpperCase());
 
         driver = DriverFactory.getDriver(browser);
-
+        this.wait= new WaitHelper(driver);
         driver.get(BASE_URL);
         wait.waitPageToBeLoaded();
+
     }
     @AfterMethod
     public void tearDown(){
