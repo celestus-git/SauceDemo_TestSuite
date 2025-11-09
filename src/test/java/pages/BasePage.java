@@ -39,7 +39,7 @@ public class BasePage {
 
     protected void clearText(WebElement element){
         wait.waitForElementToBeVisible(element);
-        element.clear();
+        element.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE);
 
     }
     protected String getCurrentUrl(){

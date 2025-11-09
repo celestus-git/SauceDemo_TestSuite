@@ -20,6 +20,7 @@ UC-3 Test Login form with credentials by passing Username & Password:
 Type credentials in username which are under Accepted username are sections.
 Enter password as secret sauce.
 Click on Login and validate the title “Swag Labs” in the dashboard.
+
 Provide parallel execution, add logging for tests and use Data Provider to parametrize tests.
 Make sure that all tasks are supported by these 3 conditions: UC-1; UC-2; UC-3.
 
@@ -27,12 +28,13 @@ Please, add task description as README.md into your solution!
 
 
 To perform the task use the various of additional options:
-Test Automation tool: Selenium WebDriver;
-Project Builder: Maven;
-Browsers: 1) Chrome; 2) Edge;
-Locators: XPath;
-Test Runner: JUnit;
-[Optional] Patterns: 1) Singleton; 2) Builder; 3) Decorator;
-[Optional] Test automation approach: BDD;
-Assertions: Built-in assertions of Unit-runners (JUnit vs TestNG);
-[Optional] Loggers: SLF4J.
+
+Test Automation tool: Selenium WeoDriver:
+Project Builder: Maven:
+Browsers: 1) Firefox: 2) Edge:
+Locators: XPath:
+Test Runner: JUnit:
+[Optional] Patterns: 1) Singleton, 2) Adapter 3) Strategy:
+[Optional] Test automation approach: BDD
+Assertions: Hamcrest;
+[Optional] Loggers: SLF4J

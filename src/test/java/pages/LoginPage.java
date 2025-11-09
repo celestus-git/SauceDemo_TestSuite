@@ -30,11 +30,15 @@ public class LoginPage extends BasePage{
         sendKeys(passwordField,password);
 
     }
-    public void clearPassword(){
+    public void clearCredentials(){
         clearText(usernameField);
+        clearText(passwordField);
+    }
+    public void clearPassword(){
+        clearText(passwordField);
     }
     public void clearUsername(){
-        clearText(passwordField);
+        clearText(usernameField);
     }
 
     public void clickLoginButton(){
@@ -45,6 +49,7 @@ public class LoginPage extends BasePage{
        enterUsername(username);
        enterPassword(password);
        clickLoginButton();
+
 
 
     }

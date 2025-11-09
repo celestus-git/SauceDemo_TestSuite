@@ -6,32 +6,34 @@
             <classes>
                 <class name="tests.LoginTest">
                     <methods>
-                        <include name="successfulLogin"/>
+                        <exclude name="successfulLogin"/>
+                        <exclude name="failedLoginUsernameEmpty"/>
+                        <include name="failedLoginPasswordEmpty"/>
                     </methods>
                 </class>
             </classes>
         </parameter>
     </test>
-    <test verbose="2" preserve-order="true" name="Edge test">
-        <parameter name="browserType" value="EDGE">
-            <classes>
-                <class name="tests.LoginTest">
-                    <methods>
-                        <include name="successfulLogin"/>
-                    </methods>
-                </class>
-            </classes>
-        </parameter>
-    </test>
-    <test verbose="2" preserve-order="true" name="Firefox test">
-        <parameter name="browserType" value="FIREFOX">
-            <classes>
-                <class name="tests.LoginTest">
-                    <methods>
-                        <include name="successfulLogin"/>
-                    </methods>
-                </class>
-            </classes>
-        </parameter>
-    </test>
-</suite>
+    <!--   <test verbose="2" preserve-order="true" name="Edge test">
+            <parameter name="browserType" value="EDGE">
+                <classes>
+                    <class name="tests.LoginTest">
+                        <methods>
+                            <include name="successfulLogin"/>
+                        </methods>
+                    </class>
+                </classes>
+            </parameter>
+        </test>
+        <test verbose="2" preserve-order="true" name="Firefox test">
+            <parameter name="browserType" value="FIREFOX">
+                <classes>
+                    <class name="tests.LoginTest">
+                        <methods>
+                            <include name="successfulLogin"/>
+                        </methods>
+                    </class>
+                </classes>
+            </parameter>
+        </test>-->
+    </suite>

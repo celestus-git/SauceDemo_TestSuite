@@ -16,4 +16,7 @@ public class InventoryPage extends BasePage{
     public boolean isInventoryPageDisplayed(){
         return isDisplayed(titleProductPage) && getCurrentUrl().contains("inventory");
     }
+    public String getTitle(){
+        return getText(titleProductPage);
+    }
 }
