@@ -6,12 +6,8 @@ import driver.BrowserType;
 import driver.DriverFactory;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Parameters;
+import org.testng.annotations.*;
 import wait.WaitHelper;
-
-import java.sql.Driver;
 
 
 public class BaseTest{
@@ -22,16 +18,16 @@ public class BaseTest{
     protected WaitHelper wait;
     private final String BASE_URL = "https://www.saucedemo.com/";
 
-    @BeforeMethod
+    @BeforeClass(alwaysRun = true)
 
-    @Parameters("browserType")
-    public void setUp(String browserName){
+    @Parameters({"browserType","headless"})
+    public void setUp(@Optional("CHROME") String browserName,@Optional("true") String headless){
 
         logger.info("Iniciando configuracion de prueba en navegador: {}", browserName);
 
         BrowserType browser = BrowserType.valueOf(browserName.toUpperCase());
 
-        driver = DriverFactory.getDriver(browser);
+        driver = DriverFactory.newDriver(browser,Boolean.parseBoolean(headless));
         this.wait= new WaitHelper(driver);
         driver.get(BASE_URL);
         wait.waitPageToBeLoaded();
@@ -40,7 +36,7 @@ public class BaseTest{
 
 
     }
-    @AfterMethod
+    @AfterClass(alwaysRun = true)
     public void tearDown(){
        if(driver!=null){
            driver.manage().deleteAllCookies();

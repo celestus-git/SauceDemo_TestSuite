@@ -1,61 +1,60 @@
 package pages;
 
+import org.apache.commons.logging.Log;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 public class LoginPage extends BasePage{
 
-    @FindBy(xpath = "//input[@data-test='username']")
-    private WebElement usernameField;
 
-    @FindBy(xpath= "//input[@data-test='password']")
-    private WebElement passwordField;
+    private final By usernameField =By.xpath( "//input[@data-test='username']");
 
-    @FindBy(xpath= "//input[@data-test='login-button']")
-    private WebElement loginButton;
+    private final By passwordField = By.xpath("//input[@data-test='password']");
 
-    @FindBy(xpath = "//h3[@data-test='error']")
-    private WebElement loginErrorMessage;
+    private final By loginButton = By.xpath("//input[@data-test='login-button']");
+
+    private final By loginErrorMessage= By.xpath("//h3[@data-test='error']");
 
     public LoginPage(WebDriver driver){
         super(driver);
     }
 
-    public void enterUsername(String username){
+    public LoginPage enterUsername(String username){
         sendKeys(usernameField,username);
+        return this;
 
     }
-    public void enterPassword(String password){
+    public LoginPage enterPassword(String password){
         sendKeys(passwordField,password);
-
+        return this;
     }
-    public void clearCredentials(){
+    public LoginPage clearCredentials(){
         clearText(usernameField);
         clearText(passwordField);
+    return this;
     }
-    public void clearPassword(){
+    public LoginPage clearPassword(){
         clearText(passwordField);
-    }
-    public void clearUsername(){
-        clearText(usernameField);
+        return this;
     }
 
-    public void clickLoginButton(){
+    public LoginPage clickLoginButton(){
         click(loginButton);
+        return this;
     }
 
-    public void login(String username, String password){
-       enterUsername(username);
-       enterPassword(password);
-       clickLoginButton();
-
-
-
+    public LoginPage login(String username, String password){
+       return enterUsername(username)
+               .enterPassword(password)
+               .clickLoginButton();
     }
-
+public String currentUsernameValue(){
+        return visible(usernameField).getAttribute("value");
+}
     public void waitForSuccessfulLogin(){
-        wait.waitForSuccessfullyLogin("inventory.html");
+        waitThatUrlContains("inventory.html");
     }
     public boolean isLoginPageDisplayed(){
         return isDisplayed(loginButton);
@@ -66,7 +65,6 @@ public class LoginPage extends BasePage{
     public String getErrorMessage(){
         return  getText(loginErrorMessage);
     }
-
 
 
 }

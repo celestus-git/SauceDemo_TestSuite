@@ -1,9 +1,6 @@
 package wait;
 
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
@@ -13,41 +10,54 @@ import java.time.Duration;
 
 public class WaitHelper {
 
-private WebDriver driver;
-
+    private final WebDriver driver;
+    private final Duration timeout;
+    private final Duration poll;
 /* Constructor aplica dependency injection. Recibe el driver como parámetro, no lo crea
  * @param driver WebDriver sobre el cual aplica las esperas
  */
 public WaitHelper(WebDriver driver){
+    this(driver,
+            Duration.ofSeconds(Long.getLong("wait.timeout.sec",10)),
+            Duration.ofMillis(Long.getLong("wait.poll.ms",300)));
+}
+public WaitHelper(WebDriver driver,Duration timeout, Duration poll){
     this.driver=driver;
+    this.timeout=timeout;
+    this.poll=poll;
 }
 
-private Wait<WebDriver> getFluentWait(){
+private FluentWait<WebDriver> fluentWait(String message){
     return new FluentWait<>(driver)
-            .withTimeout(Duration.ofSeconds(10))
-            .pollingEvery(Duration.ofSeconds(2))
-            .ignoring(NoSuchElementException.class);
+            .withTimeout(timeout)
+            .pollingEvery(poll)
+            .ignoring(NoSuchElementException.class)
+            .ignoring(StaleElementReferenceException.class)
+            .ignoring(ElementClickInterceptedException.class)
+            .ignoring(ElementNotInteractableException.class)
+            .withMessage(message);
 }
 
 public void waitPageToBeLoaded(){
-    Wait<WebDriver> wait=getFluentWait();
-    wait.until(w->{
-        String readyState =(String) ((JavascriptExecutor) driver)
-        .executeScript("return document.readyState");
-        return "complete".equals(readyState);
-    });
+    fluentWait("Waiting document.readyState=complete")
+                    .until(w->"complete".equals(((JavascriptExecutor) w)
+                    .executeScript("return document.readyState")));
 }
 
-public WebElement waitForElementToBeClickable(WebElement element){
-    return getFluentWait().until(ExpectedConditions.elementToBeClickable(element));
+public void waitForUrlContains(String urlPart){
+    fluentWait("Waiting that URL contains "+urlPart)
+            .until(ExpectedConditions.urlContains(urlPart));
+}
+public WebElement waitForElementToBeClickable(By locator){
+    return fluentWait("Waiting clickable"+locator)
+            .until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(locator)));
 
 }
-public WebElement waitForElementToBeVisible(WebElement element){
-    return getFluentWait().until(ExpectedConditions.visibilityOf(element));
+public WebElement waitForElementToBeVisible(By locator){
+    return fluentWait("Waiting visibility"+ locator)
+            .until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOfElementLocated(locator)));
 }
-public void waitForSuccessfullyLogin(String urlPart){
-    getFluentWait().until(ExpectedConditions.urlContains(urlPart));
-}
+
 
 
 
