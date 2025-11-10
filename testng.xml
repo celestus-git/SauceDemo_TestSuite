@@ -2,46 +2,32 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="All Test Suite"
        parallel="instances"
-       thread-count="6">
+       thread-count="2">
 
     <parameter name="headless" value="true"/>
 
     <test name="Chrome test">
         <parameter name="browserType" value="CHROME"/>
-            <classes>
-                <class name="tests.LoginFactory">
-                    <methods>
-                        <include name="successfulLogin"/>
-                        <include name="failedLoginUsernameEmpty"/>
-                        <include name="failedLoginPasswordEmpty"/>
-                    </methods>
-                </class>
-            </classes>
+        <classes>
+            <class name="tests.LoginFactory">
+            </class>
+        </classes>
     </test>
 
-    <test  name="Edge test">
-            <parameter name="browserType" value="EDGE"/>
-                <classes>
-                    <class name="tests.LoginFactory">
-                        <methods>
-                            <include name="successfulLogin"/>
-                            <exclude name="failedLoginUsernameEmpty"/>
-                            <exclude name="failedLoginPasswordEmpty"/>
-                        </methods>
-                    </class>
-                </classes>
+    <test name="Edge test">
+        <parameter name="browserType" value="EDGE"/>
+        <classes>
+            <class name="tests.LoginFactory">
+
+            </class>
+        </classes>
     </test>
 
-    <test verbose="2"  name="Firefox test">
-            <parameter name="browserType" value="FIREFOX"/>
-                <classes>
-                    <class name="tests.LoginFactory">
-                        <methods>
-                            <include name="successfulLogin"/>
-                            <exclude name="failedLoginUsernameEmpty"/>
-                            <exclude name="failedLoginPasswordEmpty"/>
-                        </methods>
-                    </class>
-                </classes>
-        </test>
-    </suite>
+    <test verbose="2" name="Firefox test">
+        <parameter name="browserType" value="FIREFOX"/>
+        <classes>
+            <class name="tests.LoginFactory">
+            </class>
+        </classes>
+    </test>
+</suite>

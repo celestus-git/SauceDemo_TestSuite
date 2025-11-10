@@ -65,7 +65,7 @@ public class UserCreator {
     public static List<User> getValidUserList(){
         return Arrays.asList(getStandardUser()
                 ,getProblemUser()
-                //,getPerformanceGlitchUser()
+                ,getPerformanceGlitchUser()
                 ,getErrorUser()
                 ,getVisualUser());
     }

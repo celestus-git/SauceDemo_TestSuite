@@ -7,9 +7,10 @@ import service.UserCreator;
 
 public class LoginFactory {
     @DataProvider(name = "validUsers")
-    public static Object[][] getValidUserCredentials() {
+    public static Object[][] users() {
 
         var userList = UserCreator.getValidUserList();
+        System.out.println("[DP] users=" + userList.size());
         //Conversion de List a Object[][] para TestNG
 
         Object[][] data = new Object[userList.size()][1];
@@ -22,7 +23,10 @@ public class LoginFactory {
 
     }
     @Factory(dataProvider = "validUsers")
-    public static Object[] factory(User user){
-        return new Object[]{new LoginTest(user)};
+    public Object[] factory(User user){
+        System.out.println("[FACTORY] building for user=" + user.getUsername());
+        return new Object[]{new LoginSuccessTest(user)
+        ,new LoginEmptyCredentials(user)
+        ,new LoginPasswordEmpty(user)};
     }
 }
