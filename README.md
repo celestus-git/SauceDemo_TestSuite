@@ -33,7 +33,7 @@ Test Automation tool: Selenium WeoDriver:
 Project Builder: Maven:
 Browsers: 1) Firefox: 2) Edge:
 Locators: XPath:
-Test Runner: JUnit:
+Test runners: JUnit:
 [Optional] Patterns: 1) Singleton, 2) Adapter 3) Strategy:
 [Optional] Test automation approach: BDD
 Assertions: Hamcrest;

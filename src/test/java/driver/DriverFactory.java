@@ -14,22 +14,26 @@ public class DriverFactory {
     protected static final Logger logger= LogManager.getLogger(DriverFactory.class);
 
 public static WebDriver getDriver(BrowserType browserType){
-logger.debug("Inicializando Webdriver para el navegador: {}",browserType.name());
 
     WebDriver driver;
+    logger.debug("Inicializando Webdriver para el navegador: {}",browserType.name());
+
+
 
 
     switch (browserType){
         case CHROME -> {
             WebDriverManager.chromedriver().setup();
+
             ChromeOptions chromeOptions = new ChromeOptions();
 
             chromeOptions.addArguments("--disable notifications");
             chromeOptions.addArguments("--disable-popup-blocking");
 
-            driver= new ChromeDriver();
+            driver= new ChromeDriver(chromeOptions);
 
             logger.info("Chrome driver creado con éxito");
+
         }
         case EDGE -> {
             WebDriverManager.edgedriver().setup();
@@ -41,7 +45,10 @@ logger.debug("Inicializando Webdriver para el navegador: {}",browserType.name())
             driver= new FirefoxDriver();
             logger.info("Firefox driver creado con éxito");
         }
-        default -> throw new UnsupportedOperationException("The browser chosen "+ browserType +" is not supported");
+        default -> {
+            WebDriverManager.chromedriver().setup();
+            driver= new ChromeDriver();
+        }
     }
     driver.manage().window().maximize();
     return driver;
