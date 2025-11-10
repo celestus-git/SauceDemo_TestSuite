@@ -1,10 +1,9 @@
 package pages;
 
-import org.apache.commons.logging.Log;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
+
 
 public class LoginPage extends BasePage{
 
@@ -20,6 +19,7 @@ public class LoginPage extends BasePage{
     public LoginPage(WebDriver driver){
         super(driver);
     }
+
 
     public LoginPage enterUsername(String username){
         sendKeys(usernameField,username);
