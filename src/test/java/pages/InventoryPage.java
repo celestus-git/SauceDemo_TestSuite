@@ -1,19 +1,28 @@
 package pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
+
 
 public class InventoryPage extends BasePage{
 
-    @FindBy(xpath = "//div[@class='app_logo']")
-    private WebElement titleProductPage;
+    private final By titleProductPage = By.xpath( "//div[@class='app_logo']");
+    private final By appLogo = By.xpath("//*[contains(@class,'app_logo') and normalize-space()='Swag Labs']");
+
 
     public InventoryPage(WebDriver driver){
         super(driver);
 
     }
+    public InventoryPage ensureReady(){
+        waitThatUrlContains("inventory");
+        isDisplayed(appLogo);
+        return this;
+    }
     public boolean isInventoryPageDisplayed(){
-        return isDisplayed(titleProductPage) && getCurrentUrl().contains("inventory");
+        return isDisplayed(appLogo) && getCurrentUrl().contains("inventory");
+    }
+    public String getTitle(){
+        return getText(appLogo);
     }
 }
