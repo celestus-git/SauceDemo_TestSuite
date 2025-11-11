@@ -1,8 +1,8 @@
-package driver;
+package drivers;
 
 public enum BrowserType {
 
     CHROME(),
     FIREFOX(),
-    EDGE();
+    EDGE()
 }

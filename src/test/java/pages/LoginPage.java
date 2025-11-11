@@ -3,8 +3,10 @@ package pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
-public class LoginPage extends BasePage{
+public class LoginPage extends  BasePage{
+
 
     @FindBy(xpath = "//input[@data-test='username']")
     private WebElement usernameField;
@@ -19,7 +21,11 @@ public class LoginPage extends BasePage{
     private WebElement loginErrorMessage;
 
     public LoginPage(WebDriver driver){
+
         super(driver);
+
+
+        PageFactory.initElements(driver,this);
     }
 
     public void enterUsername(String username){
@@ -37,9 +43,7 @@ public class LoginPage extends BasePage{
     public void clearPassword(){
         clearText(passwordField);
     }
-    public void clearUsername(){
-        clearText(usernameField);
-    }
+
 
     public void clickLoginButton(){
         click(loginButton);
@@ -54,9 +58,7 @@ public class LoginPage extends BasePage{
 
     }
 
-    public void waitForSuccessfulLogin(){
-        wait.waitForSuccessfullyLogin("inventory.html");
-    }
+
     public boolean isLoginPageDisplayed(){
         return isDisplayed(loginButton);
     }
@@ -64,6 +66,7 @@ public class LoginPage extends BasePage{
         return  isDisplayed(loginErrorMessage);
     }
     public String getErrorMessage(){
+        wait.waitForElementToBeVisible(loginErrorMessage);
         return  getText(loginErrorMessage);
     }
 
