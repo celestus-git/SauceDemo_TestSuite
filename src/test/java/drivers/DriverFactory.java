@@ -39,9 +39,13 @@ public class DriverFactory {
 
                 ChromeOptions chromeOptions = new ChromeOptions();
 
-                if (isHeadless) chromeOptions.addArguments("--headless=new", "--window-size=1366,768");
+                if (isHeadless) chromeOptions.addArguments("--headless=new",
+                                                            "--window-size=1366,768",
+                                                            "--no-sanbox",
+                                                            "--disable-dev-shm-usage",
+                                                            "--disable-gpu");
 
-                chromeOptions.addArguments("--disable notifications", "--disable-popup-blocking", "disable-extensions");
+                chromeOptions.addArguments("--disable-notifications", "--disable-popup-blocking", "--disable-extensions");
 
                 driver = new ChromeDriver(chromeOptions);
 
@@ -59,7 +63,7 @@ public class DriverFactory {
             case FIREFOX -> {
                 WebDriverManager.firefoxdriver().setup();
                 FirefoxOptions firefoxOptions = new FirefoxOptions();
-                if (isHeadless) firefoxOptions.addArguments("--headless=new", "--window-size=1366,768");
+                if (isHeadless) firefoxOptions.addArguments("--headless", "--window-size=1366,768");
                 driver = new FirefoxDriver(firefoxOptions);
                 logger.info("Firefox driver creado con éxito");
             }

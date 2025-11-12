@@ -87,7 +87,26 @@
             <artifactId>logback-classic</artifactId>
             <version>1.5.21</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/io.qameta.allure/allure-maven -->
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-maven</artifactId>
+            <version>2.16.1</version>
 
+        </dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-cucumber7-jvm</artifactId>
+            <version>2.25.0</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.cucumber</groupId>
+                    <artifactId>messages</artifactId>
+                </exclusion>
+            </exclusions>
+
+        </dependency>
     </dependencies>
 
     <build>
@@ -97,7 +116,10 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.5.4</version>
                 <configuration>
-                <skip>true</skip>
+
+                    <includes>
+                        <include>**/CucumberTestSuite.java</include>
+                    </includes>
                 </configuration>
             </plugin>
             <plugin>
@@ -126,6 +148,14 @@
 
                     <useModulePath>false</useModulePath>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>2.16.1</version> <configuration>
+                <resultsDirectory>${project.build.directory}/allure-results</resultsDirectory>
+                <reportDirectory>${project.build.directory}/allure-report</reportDirectory>
+            </configuration>
             </plugin>
         </plugins>
     </build>

@@ -25,24 +25,30 @@ public class Hook  {
 
     @Before(order = 0)
     public void SetUpScenario(Scenario scenario){
-
-        // 1. Obtener los parámetros del navegador
-        String browserName = scenario.getSourceTagNames().stream()
-                .filter(tag -> tag.startsWith("@browser="))
-                .map(tag -> tag.split("=")[1].toUpperCase())
-                .findFirst()
-                .orElse(BrowserType.CHROME.name());
-
-        boolean isHeadless = Boolean.parseBoolean(System.getProperty("headless","false"));
+        logger.info("DIAGNOSTICO: Valor de -Dtest.browser (Input Maven): {}", System.getProperty("test.browser"));
+        logger.info("DIAGNOSTICO: Valor de 'browser' (Output Java): {}", System.getProperty("browser"));
+        String browserNameFromSystem = System.getProperty("test.browser");
+        String finalBrowserName;
+        if (browserNameFromSystem!=null &&!browserNameFromSystem.isEmpty()){
+            finalBrowserName= browserNameFromSystem.toUpperCase();
+        } else {
+            // 1. Obtener los parámetros del navegador
+            finalBrowserName = scenario.getSourceTagNames().stream()
+                    .filter(tag -> tag.startsWith("@browser="))
+                    .map(tag -> tag.split("=")[1].toUpperCase())
+                    .findFirst()
+                    .orElse(BrowserType.CHROME.name());
+        }
+        boolean isHeadless = Boolean.parseBoolean(System.getProperty("headless","true"));
 
         logger.info("===========================");
-        logger.info("START SCENARIO: {} | Browser: {} | Headless: {}", scenario.getName(), browserName, isHeadless);
+        logger.info("START SCENARIO: {} | Browser: {} | Headless: {}", scenario.getName(), finalBrowserName, isHeadless);
         logger.info("===========================");
 
 
         try {
             // Convierte el nombre del String a tu enum BrowserType
-            BrowserType browserType = BrowserType.valueOf(browserName);
+            BrowserType browserType = BrowserType.valueOf(finalBrowserName);
 
             // LLAMA al método que crea e inicializa el driver en TestContext
             this.testContext.setupDriver(browserType, isHeadless);
@@ -59,7 +65,7 @@ public class Hook  {
             }
 
         } catch (IllegalArgumentException e) {
-            logger.error("Browser name {} is invalid. Using default Chrome.", browserName);
+            logger.error("Browser name {} is invalid. Using default Chrome.", finalBrowserName);
             // Manejar un caso de fallback si el tag es incorrecto, y re-intentar la inicialización
             this.testContext.setupDriver(BrowserType.CHROME, isHeadless);
             WebDriver driver = this.testContext.getDriver();
