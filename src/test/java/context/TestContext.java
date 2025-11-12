@@ -27,10 +27,12 @@ public class TestContext {
         this.validUsers= UserCreator.getValidUserList();
     }
     public void setupDriver(BrowserType browserType, boolean isHeadless) {
-        System.setProperty("browser",browserType.name());
-        System.setProperty("headless",String.valueOf(isHeadless));
+        if (this.driver==null) {
+            System.setProperty("browser", browserType.name());
+            System.setProperty("headless", String.valueOf(isHeadless));
 
-        this.driver = webDriverSupplier.get();
+            this.driver = webDriverSupplier.get();
+        }
     }
     public WebDriver getDriver() {
         return this.driver;

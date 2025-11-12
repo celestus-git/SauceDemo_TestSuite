@@ -12,17 +12,15 @@ public abstract class BasePage {
         this.driver=driver;
         this.wait= new WaitHelper(driver);
     }
-    protected void click(WebElement element){
+    protected void clickButton(WebElement element){
         wait.waitForElementToBeClickable(element);
         element.click();
     }
-    protected void sendKeys(WebElement element, String text){
+    protected void sendText(WebElement element,String text){
         wait.waitForElementToBeVisible(element);
         element.clear();
         if (text!=null &&!text.isEmpty()){
             element.sendKeys(text);
-        } else {
-          //  throw new IllegalArgumentException("text cannot be null or empty");
         }
     }
     protected void clearText(WebElement element){
@@ -45,10 +43,6 @@ public abstract class BasePage {
         wait.waitForElementToBeVisible(element);
         return element.getText() ;
     }
-    protected String getPageTitle(){
-        return driver.getTitle();
-    }
-
 
     protected String getCurrentUrl(){
         return driver.getCurrentUrl();

@@ -9,7 +9,7 @@ public class User {
     private final String password;
 
     //Constructor privado solo para la clase interna Builder
-    private User(String username,String password){
+    public User(String username, String password){
 
         this.username= username;
         this.password=password;

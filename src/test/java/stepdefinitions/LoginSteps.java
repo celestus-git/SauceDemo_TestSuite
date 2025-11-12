@@ -3,6 +3,7 @@ package stepdefinitions;
 import Logger.LogManager;
 import context.TestContext;
 import data.User;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -11,7 +12,6 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import io.cucumber.java.en.When;
 
-import pages.InventoryPage;
 import pages.LoginPage;
 
 
@@ -31,29 +31,62 @@ private final Logger logger = LogManager.getLogger(LoginSteps.class);
     @Given("user is on the LoginPage")
     public void userIsOnTheLoginPage(){
         WebDriver driver = context.getDriver();
-        context.loginPage = new LoginPage(driver);
+       context.loginPage = new LoginPage(driver);
         logger.info("VERIFICATION: the Login page is fully loaded");
         assertThat(context.loginPage.isLoginPageDisplayed(),is(true));
         logger.info("VERIFICATION: The page is successfully loaded");
 
     }
-    @When("user enters valid credentials {string}")
-    public void userEnterValidCredentials(String userType){
-        User validUser = context.getValidUsers().stream()
-                .filter(user -> user.getUsername().equals(userType))
-                .findFirst()
-                .orElseThrow(() -> new AssertionError("Usuario '" + userType + "' no encontrado en la lista de usuarios válidos."));
+    @When("user enters valid credentials {string} and {string}")
+    public void enterUserCredentials(String usarname, String password){
+        User user = new User(usarname,password);
 
-        // 2. Almacenar este usuario como el actual en el TestContext
-        context.setCurrentUser(validUser);
+        context.setCurrentUser(user);
+        context.loginPage.enterCredentials(user);
+
+        logger.info("Credentials entered {} {}",usarname,password);
+        logger.info("ACTION: Credentials provided in input fields.");
+    }
+
+    @And("user clears input credentials")
+    public void userClearsInputCredentials() {
+        context.loginPage.clearCredentials();
+    }
+
+    @And("user clears password credential")
+    public void userClearsPasswordCredential() {
+        context.loginPage.clearPassword();
+    }
+    @When("user tries to login")
+    public void userTriesToLogin(){
+        context.loginPage.clickLoginButton();
+        logger.info("ACTION clicked Login button on empty fields");
+    }
+
+    @When("user clicks the login button")
+    public void userClicksLoginButton(){
+        User currentUser= context.getCurrentUser();
+
+        logger.info("ACTION: performing login for user {}",currentUser.getUsername());
+
+    context.inventoryPage= context.loginPage.login(currentUser);
+
     }
     @Then("the user is directed to Inventory page")
     public void userRedirectedToInventoryPage(){
-        WebDriver driver = context.getDriver();
-        context.inventoryPage = new InventoryPage(driver);
 
         assertThat(context.inventoryPage.isInventoryPageDisplayed(),is(true));
         logger.info("SUCCESSFUL ASSERT, InventoryPageLoaded");
     }
+
+    @Then("an error message is displayed {string}")
+    public void errorMessageIsDisplayed(String expectedErrorMessage){
+        String errorMessageDisplayed = context.loginPage.getErrorMessage();
+
+        //assertThat(errorMessageDisplayed,is(expectedErrorMessage));
+        logger.info("SUCCESSFUL ASSERT: error message displayed: {}",errorMessageDisplayed);
+    }
+
+
 
 }

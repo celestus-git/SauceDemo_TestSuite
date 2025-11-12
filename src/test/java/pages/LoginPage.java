@@ -1,5 +1,6 @@
 package pages;
 
+import data.User;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -28,15 +29,9 @@ public class LoginPage extends  BasePage{
         PageFactory.initElements(driver,this);
     }
 
-    public void enterUsername(String username){
-        sendKeys(usernameField,username);
-
-    }
-    public void enterPassword(String password){
-        sendKeys(passwordField,password);
-
-    }
     public void clearCredentials(){
+       isDisplayed(usernameField);
+
         clearText(usernameField);
         clearText(passwordField);
     }
@@ -46,28 +41,33 @@ public class LoginPage extends  BasePage{
 
 
     public void clickLoginButton(){
-        click(loginButton);
+
+        clickButton(loginButton);
     }
-
-    public void login(String username, String password){
-       enterUsername(username);
-       enterPassword(password);
-       clickLoginButton();
+    public void enterCredentials(User user){
+        sendText(usernameField,user.getUsername());
+        sendText(passwordField,user.getPassword());
 
 
+    }
+    public InventoryPage login(User user){
+
+        clickLoginButton();
+
+       return new InventoryPage(driver);
 
     }
 
 
     public boolean isLoginPageDisplayed(){
-        return isDisplayed(loginButton);
+
+        return wait.waitForElementToBeVisible(loginButton).isDisplayed();
     }
-    public boolean isLoginErrorMessageDisplayed(){
-        return  isDisplayed(loginErrorMessage);
-    }
+
     public String getErrorMessage(){
-        wait.waitForElementToBeVisible(loginErrorMessage);
-        return  getText(loginErrorMessage);
+        isDisplayed(loginErrorMessage);
+       return loginErrorMessage.getText();
+
     }
 
 
