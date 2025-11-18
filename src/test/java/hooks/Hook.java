@@ -5,32 +5,41 @@ import drivers.BrowserType;
 import Logger.LogManager;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import io.qameta.allure.Allure;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import io.cucumber.java.Scenario;
-import drivers.BrowserManager;
+
+import java.io.ByteArrayInputStream;
 
 
-public class Hook  {
+public class Hook {
 
+    private static final String BASE_URL = "https://www.saucedemo.com/";
     private final Logger logger = LogManager.getLogger(Hook.class);
     private final TestContext testContext;
 
 
-    public Hook(TestContext testContext ){
+    public Hook(TestContext testContext) {
 
-        this.testContext=testContext;
+        this.testContext = testContext;
 
     }
 
     @Before(order = 0)
-    public void SetUpScenario(Scenario scenario){
-        logger.info("DIAGNOSTICO: Valor de -Dtest.browser (Input Maven): {}", System.getProperty("test.browser"));
+    public void SetUpScenario(Scenario scenario) {
+
+        String browserNameFromSystem = System.getProperty("browser");
+
         logger.info("DIAGNOSTICO: Valor de 'browser' (Output Java): {}", System.getProperty("browser"));
-        String browserNameFromSystem = System.getProperty("test.browser");
+
         String finalBrowserName;
-        if (browserNameFromSystem!=null &&!browserNameFromSystem.isEmpty()){
-            finalBrowserName= browserNameFromSystem.toUpperCase();
+
+
+        if (browserNameFromSystem != null && !browserNameFromSystem.isEmpty()) {
+            finalBrowserName = browserNameFromSystem.toUpperCase();
         } else {
             // 1. Obtener los parámetros del navegador
             finalBrowserName = scenario.getSourceTagNames().stream()
@@ -39,56 +48,54 @@ public class Hook  {
                     .findFirst()
                     .orElse(BrowserType.CHROME.name());
         }
-        boolean isHeadless = Boolean.parseBoolean(System.getProperty("headless","true"));
+        boolean isHeadless = Boolean.parseBoolean(System.getProperty("headless", "true"));
+
+
+        System.setProperty("browser", finalBrowserName);
+        System.setProperty("headless", String.valueOf(isHeadless));
+
+        String browserUpper = finalBrowserName.toUpperCase();
+
+        Allure.parameter("browser", browserUpper);
+        Allure.label("epic", "BROWSER: " + browserUpper);
+        Allure.label("parentSuite","BROWSERS");
+        Allure.label("suite",browserUpper);
+
+
 
         logger.info("===========================");
         logger.info("START SCENARIO: {} | Browser: {} | Headless: {}", scenario.getName(), finalBrowserName, isHeadless);
         logger.info("===========================");
 
 
-        try {
-            // Convierte el nombre del String a tu enum BrowserType
-            BrowserType browserType = BrowserType.valueOf(finalBrowserName);
-
-            // LLAMA al método que crea e inicializa el driver en TestContext
-            this.testContext.setupDriver(browserType, isHeadless);
-
-            // 3. Obtener el driver inicializado del TestContext
-            WebDriver driver = this.testContext.getDriver();
-
-            // 4. Navegación (Solo si el driver se creó con éxito)
-            if (driver != null) {
-                driver.get("https://www.saucedemo.com/");
-                logger.info("Navigating to base URL");
-            } else {
-                logger.error("ERROR. Webdriver could not be created/injected correctly by DriverFactory.");
-            }
-
-        } catch (IllegalArgumentException e) {
-            logger.error("Browser name {} is invalid. Using default Chrome.", finalBrowserName);
-            // Manejar un caso de fallback si el tag es incorrecto, y re-intentar la inicialización
-            this.testContext.setupDriver(BrowserType.CHROME, isHeadless);
-            WebDriver driver = this.testContext.getDriver();
-            if (driver != null) { driver.get("https://www.saucedemo.com/"); }
-        }
+        WebDriver driver = testContext.getDriver();
+        driver.get(BASE_URL);
+        logger.info("Navigating to BASE URL {}", BASE_URL);
     }
 
     @After(order = 0)
-    public void tearDownScenario(Scenario scenario){
+    public void tearDownScenario(Scenario scenario) {
 
         // 1. Obtener el driver a través del contexto
-        WebDriver driver = this.testContext.getDriver();
+        WebDriver driver = null;
+        try {
+            driver = testContext.getDriver();
+        } catch (Exception ignored) {
 
-        if (driver != null && scenario.isFailed()){
+        }
+
+        if (driver != null && scenario.isFailed()) {
             try {
                 // Aquí iría tu lógica de captura de pantalla (si la tienes)
-                logger.error("Scenario '{}' is failed. Check log",scenario.getName());
-            }catch (Exception e) {
+                logger.error("Scenario '{}' is failed. Check log", scenario.getName());
+                byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+                Allure.addAttachment("Failure Screenshot", new ByteArrayInputStream(screenshot));
+            } catch (Exception e) {
                 logger.warn("Screenshot didn't indexed: {}", e.getMessage());
             }
         }
+        testContext.cleanUp();
 
-       BrowserManager.closeDriver(driver);
 
         logger.info("ENDED SCENARIO: {}| STATUS: {}", scenario.getName(), (scenario.isFailed()) ? "FAILED" : "SUCCESSFUL");
         logger.info("===========================");

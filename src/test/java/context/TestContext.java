@@ -2,40 +2,29 @@ package context;
 
 import data.User;
 import data.UserCreator;
-import drivers.BrowserType;
 import drivers.WebDriverSupplier;
 import org.openqa.selenium.WebDriver;
 import pages.InventoryPage;
 import pages.LoginPage;
 import pages.PageObjectManager;
-
+import javax.inject.Inject;
 import java.util.List;
 
 public class TestContext {
 
-    private final WebDriverSupplier webDriverSupplier;
     private final List<User> validUsers;
+    private final WebDriverSupplier webDriverSupplier;
+
     private WebDriver driver;
-    public LoginPage loginPage;
     public InventoryPage inventoryPage;
     public User currentUser;
-    private final PageObjectManager pageObjectManager;
+    private PageObjectManager pageObjectManager;
 
-    public TestContext(WebDriverSupplier webDriverSupplier,PageObjectManager pageObjectManager) {
-        this.webDriverSupplier = webDriverSupplier;
-        this.pageObjectManager=pageObjectManager;
+    @Inject
+    public TestContext(WebDriverSupplier webDriverSupplier) {
         this.validUsers= UserCreator.getValidUserList();
-    }
-    public void setupDriver(BrowserType browserType, boolean isHeadless) {
-        if (this.driver==null) {
-            System.setProperty("browser", browserType.name());
-            System.setProperty("headless", String.valueOf(isHeadless));
+        this.webDriverSupplier = webDriverSupplier;
 
-            this.driver = webDriverSupplier.get();
-        }
-    }
-    public WebDriver getDriver() {
-        return this.driver;
     }
     public List<User>getValidUsers(){
         return validUsers;
@@ -47,7 +36,35 @@ public class TestContext {
     public void setCurrentUser(User user) {
         this.currentUser = user;
     }
+
+    public WebDriver getDriver() {
+        if (driver==null){
+            driver = webDriverSupplier.get();
+        }
+        return driver;
+    }
+
+    public InventoryPage getInventoryPage() {
+        return inventoryPage;
+    }
+
+    public void setInventoryPage(InventoryPage inventoryPage) {
+        this.inventoryPage = inventoryPage;
+    }
+
     public PageObjectManager getPageObjectManager() {
+       if (pageObjectManager ==null){
+           pageObjectManager = new PageObjectManager(getDriver());
+       }
+
         return pageObjectManager;
+    }
+
+    public void cleanUp(){
+        if (driver!= null){
+            driver.quit();
+            driver=null;
+            pageObjectManager=null;
+        }
     }
 }

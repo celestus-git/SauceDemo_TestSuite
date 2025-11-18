@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 
 public class InventorySteps {
 
+
 private final Logger logger = LogManager.getLogger(InventorySteps.class);
 
 private final TestContext testContext;
@@ -16,5 +17,7 @@ public InventorySteps(TestContext testContext,WebDriver driver){
     this.testContext= testContext;
     this.driver= driver;
 }
+
+
 }
 

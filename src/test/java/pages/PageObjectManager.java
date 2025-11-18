@@ -4,19 +4,17 @@ import org.openqa.selenium.WebDriver;
 
 public class PageObjectManager {
     private LoginPage loginPage;
-    private WebDriver driver;
-    public PageObjectManager(){
+    private final WebDriver driver;
+
+    public PageObjectManager(WebDriver driver){
+        this.driver=driver;
 
     }
 
-    public void initializeDriver(WebDriver driver) {
-        this.driver = driver;
-        this.loginPage=new LoginPage(driver);
-    }
 
     public LoginPage getLoginPage() {
         if (loginPage==null){
-            throw new IllegalStateException("LoginPage not initialized");
+            loginPage = new LoginPage(driver);
         }
 
         return loginPage;

@@ -1,43 +1,73 @@
 Feature: Login Functionality
 
-  Scenario Outline: Successful login with valid credentials for different users
+Feature: Login smoke
 
-    Given user is on the LoginPage
+  Scenario: Simple login on chrome
+    Given user is on the LoginPage on "chrome" browser
+    When user enters valid credentials "standard_user" and "secret_sauce"
+    And user clicks the login button
+    Then the user is directed to Inventory page
+
+  Scenario Outline: Successful login with valid credentials on <browser> with "<username>"
+
+    Given user is on the LoginPage on "<browser>" browser
     When user enters valid credentials "<username>" and "<password>"
     And user clicks the login button
     Then the user is directed to Inventory page
 
     Examples:
-      | username         | password     |
-      | standard_user    | secret_sauce |
-      | problem_user     | secret_sauce |
+      | browser | username      | password     |
+      | chrome  | standard_user | secret_sauce |
+      | firefox | standard_user | secret_sauce |
+      | edge    | standard_user | secret_sauce |
+      | chrome  | problem_user  | secret_sauce |
+      | firefox | problem_user  | secret_sauce |
+      | edge    | problem_user  | secret_sauce |
+      | chrome  | visual_user   | secret_sauce |
+      | firefox | visual_user   | secret_sauce |
+      | edge    | visual_user   | secret_sauce |
 
 
 
-  Scenario Outline: Failed login attempt with clear credentials
+  Scenario Outline: Failed login attempt with clear credentials on <browser>
 
-    Given   user is on the LoginPage
+    Given   user is on the LoginPage on "<browser>" browser
     When user enters valid credentials "<username>" and "<password>"
     And user clears input credentials
     When user tries to login
     Then an error message is displayed "<errorMessage>"
 
     Examples:
-      | username         | password     | errorMessage
-      | standard_user    | secret_sauce | Epic sadface: Username is required
-      | problem_user     | secret_sauce | Epic sadface: Username is required
+      | browser | username      | password     |  errorMessage                        |
+      | chrome  | standard_user | secret_sauce |  Epic sadface: Username is required  |
+      | firefox | standard_user | secret_sauce |  Epic sadface: Username is required  |
+      | edge    | standard_user | secret_sauce |  Epic sadface: Username is required  |
+      | chrome  | problem_user  | secret_sauce |  Epic sadface: Username is required  |
+      | firefox | problem_user  | secret_sauce |  Epic sadface: Username is required  |
+      | edge    | problem_user  | secret_sauce |  Epic sadface: Username is required  |
+      | chrome  | visual_user   | secret_sauce |  Epic sadface: Username is required  |
+      | firefox | visual_user   | secret_sauce |  Epic sadface: Username is required  |
+      | edge    | visual_user   | secret_sauce |  Epic sadface: Username is required  |
 
 
-  Scenario Outline: Failed login attempt with clear password
 
-    Given   user is on the LoginPage
+  Scenario Outline: Failed login attempt with clear password on <browser>
+
+    Given   user is on the LoginPage on "<browser>" browser
     When user enters valid credentials "<username>" and "<password>"
     And user clears password credential
     When user tries to login
     Then an error message is displayed "<errorMessage>"
 
     Examples:
-      | username         | password     | errorMessage
-      | standard_user    | secret_sauce | Epic sadface: password is required
-      | problem_user     | secret_sauce | Epic sadface: password is required
+      | browser | username      | password     |  errorMessage                        |
+      | chrome  | standard_user | secret_sauce |  Epic sadface: Password is required  |
+      | firefox | standard_user | secret_sauce |  Epic sadface: Password is required  |
+      | edge    | standard_user | secret_sauce |  Epic sadface: Password is required  |
+      | chrome  | problem_user  | secret_sauce |  Epic sadface: Password is required  |
+      | firefox | problem_user  | secret_sauce |  Epic sadface: Password is required  |
+      | edge    | problem_user  | secret_sauce |  Epic sadface: Password is required  |
+      | chrome  | visual_user   | secret_sauce |  Epic sadface: Password is required  |
+      | firefox | visual_user   | secret_sauce |  Epic sadface: Password is required  |
+      | edge    | visual_user   | secret_sauce |  Epic sadface: Password is required  |
 
