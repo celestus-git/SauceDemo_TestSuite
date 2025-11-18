@@ -16,14 +16,14 @@ public class DriverFactory {
 
     private WebDriver driver;
     protected static final Logger logger = LogManager.getLogger(DriverFactory.class);
-    private static final String BASE_URL = "https://www.saucedemo.com/";
+
 
     public DriverFactory() {
     }
 
     public WebDriver createDriver(BrowserType browserType, boolean isHeadless) {
         this.driver = initializeDriver(browserType, isHeadless);
-        logger.debug("Inicializando Webdriver para el navegador: {}", browserType.name());
+        logger.debug("Initializing Webdriver for the browser: {}", browserType.name());
 
         return this.driver;
     }
@@ -41,7 +41,7 @@ public class DriverFactory {
 
                 if (isHeadless) chromeOptions.addArguments("--headless=new",
                                                             "--window-size=1366,768",
-                                                            "--no-sanbox",
+                                                            "--no-sandbox",
                                                             "--disable-dev-shm-usage",
                                                             "--disable-gpu");
 
