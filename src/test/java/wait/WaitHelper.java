@@ -7,13 +7,13 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
 
 import java.time.Duration;
 
 public class WaitHelper {
 
-private WebDriver driver;
+private final WebDriver driver;
 
 /* Constructor aplica dependency injection. Recibe el driver como parámetro, no lo crea
  * @param driver WebDriver sobre el cual aplica las esperas
@@ -45,9 +45,7 @@ public WebElement waitForElementToBeClickable(WebElement element){
 public WebElement waitForElementToBeVisible(WebElement element){
     return getFluentWait().until(ExpectedConditions.visibilityOf(element));
 }
-public void waitForSuccessfullyLogin(String urlPart){
-    getFluentWait().until(ExpectedConditions.urlContains(urlPart));
-}
+
 
 
 

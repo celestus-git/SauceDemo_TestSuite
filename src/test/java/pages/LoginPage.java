@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import java.util.Optional;
 
 public class LoginPage extends  BasePage{
 
@@ -48,12 +49,24 @@ public class LoginPage extends  BasePage{
 
 
     }
-    public InventoryPage login(User user){
+    public Optional<InventoryPage> login(User user){
+        // Rellenar credenciales si fueron pasadas
+        if (user != null) {
+            enterCredentials(user);
+        }
 
+        // Realiza el click que debería navegar a Inventory
         clickLoginButton();
 
-       return new InventoryPage(driver);
+        // Crea el Page Object destino y valida su presencia
+        InventoryPage inventory = new InventoryPage(driver);
+        try {
+            inventory.waitUntilLoaded();
+            return Optional.of(inventory);
+        }catch (Exception e) {
 
+            return Optional.empty();
+        }
     }
 
 

@@ -10,7 +10,10 @@ import static org.hamcrest.CoreMatchers.is;
 import org.slf4j.Logger;
 import io.cucumber.java.en.When;
 
+import pages.InventoryPage;
 import pages.LoginPage;
+
+import java.util.Optional;
 
 
 public class LoginSteps  {
@@ -27,16 +30,6 @@ private final Logger logger = LogManager.getLogger(LoginSteps.class);
 
     }
 
-
-//    @Given("user is on the LoginPage")
-//    public void userIsOnTheLoginPage(){
-//        WebDriver driver = context.getDriver();
-//        context.loginPage = new LoginPage(driver);
-//        logger.info("VERIFICATION: the Login page is fully loaded");
-//        assertThat(context.loginPage.isLoginPageDisplayed(),is(true));
-//        logger.info("VERIFICATION: The page is successfully loaded");
-//
-//    }
     @When("user enters valid credentials {string} and {string}")
     public void enterUserCredentials(String username, String password){
 
@@ -66,14 +59,21 @@ private final Logger logger = LogManager.getLogger(LoginSteps.class);
     }
 
     @When("user clicks the login button")
-    public void userClicksLoginButton(){
-        User currentUser= context.getCurrentUser();
+    public void userClicksLoginButton() {
 
-        logger.info("ACTION: performing login for user {}",currentUser.getUsername());
+        User currentUser = context.getCurrentUser();
+        Optional<InventoryPage> maybeInventory = context.getPageObjectManager().getLoginPage().login(currentUser);
 
-    context.setInventoryPage(loginPage.login(currentUser));
+        if (maybeInventory.isPresent()) {
+            context.setInventoryPage(maybeInventory.get());
+            logger.info("Login successful, inventory page set in context");
+        } else {
+            throw new AssertionError("Login did not navigate to InventoryPage for user: " +
+                    (currentUser != null ? currentUser.getUsername() : "null"));
 
+        }
     }
+
     @Then("the user is directed to Inventory page")
     public void userRedirectedToInventoryPage(){
 
@@ -82,10 +82,10 @@ private final Logger logger = LogManager.getLogger(LoginSteps.class);
     }
 
     @Then("an error message is displayed {string}")
-    public void errorMessageIsDisplayed(){
+    public void errorMessageIsDisplayed(String expectedErrorMessage){
         String errorMessageDisplayed = loginPage.getErrorMessage();
 
-        //assertThat(errorMessageDisplayed,is(expectedErrorMessage));
+        assertThat(errorMessageDisplayed,is(expectedErrorMessage));
         logger.info("SUCCESSFUL ASSERT: error message displayed: {}",errorMessageDisplayed);
     }
 

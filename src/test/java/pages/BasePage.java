@@ -3,6 +3,8 @@ package pages;
 import org.openqa.selenium.*;
 import wait.WaitHelper;
 
+//Clase abstracta para reusabilidad y polimorfismo
+
 public abstract class BasePage {
 
     protected WebDriver driver;
@@ -15,6 +17,7 @@ public abstract class BasePage {
     protected void clickButton(WebElement element){
         wait.waitForElementToBeClickable(element);
         element.click();
+        wait.waitPageToBeLoaded();
     }
     protected void sendText(WebElement element,String text){
         wait.waitForElementToBeVisible(element);

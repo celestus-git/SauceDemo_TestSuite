@@ -16,7 +16,22 @@ public class InventoryPage extends BasePage{
         PageFactory.initElements(driver,this);
 
     }
-    public boolean isInventoryPageDisplayed(){
-        return isDisplayed(titleProductPage) && getCurrentUrl().contains("inventory");
+    public boolean isInventoryPageDisplayed() {
+        try {
+            // wait es heredado de BasePage (instancia de WaitHelper)
+            wait.waitForElementToBeVisible(titleProductPage);
+            return titleProductPage.isDisplayed();
+        } catch (Exception e) {
+            // Capturamos TimeoutException, NoSuchElementException, StaleElementReference, etc.
+            return false;
+        }
     }
+    public void waitUntilLoaded() {
+        // Espera que el DOM esté listo
+        wait.waitPageToBeLoaded();
+
+        // Luego, espera que el elemento principal de la página sea visible
+        wait.waitForElementToBeVisible(titleProductPage);
+    }
+
 }
