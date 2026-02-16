@@ -5,7 +5,7 @@ on:
   workflow_dispatch: #  permite darle un botón de "Play" manual
 
 jobs:
-  check-java:
+ automation-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -14,5 +14,5 @@ jobs:
         with:
           java-version: '23'
           distribution: 'corretto'
-      - name: Version Check
-        run: java -version
+      - name: Run SauceDemo Tests
+        run: mvn test
